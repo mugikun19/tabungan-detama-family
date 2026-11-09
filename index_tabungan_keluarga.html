@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tabungan Keluarga</title>
+<style>
+  :root {
+    --bg:#F4F6FB;--surface:#fff;--border:#E2E8F4;
+    --accent:#3B6FE0;--green:#18A066;--green-light:#E8F7F1;
+    --red:#D94040;--red-light:#FDEAEA;
+    --amber:#B45309;--amber-light:#FEF3C7;
+    --purple:#6D28D9;--purple-light:#EDE9FE;
+    --teal:#0D7377;--teal-light:#CCFBF1;
+    --text:#1A1F2E;--muted:#7B859A;
+    --shadow:0 1px 8px rgba(30,50,100,.08);
+    color-scheme:light;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    box-sizing:border-box;
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --bg:#0F1623;--surface:#1A2235;--border:#2A3650;
+      --accent:#5B8FFF;--green:#2CC885;--green-light:#0F2920;
+      --red:#FF6B6B;--red-light:#2A1515;
+      --amber:#FCD34D;--amber-light:#2A1F05;
+      --purple:#A78BFA;--purple-light:#1E1A3A;
+      --teal:#2DD4BF;--teal-light:#042F2E;
+      --text:#E8EDF8;--muted:#7B859A;
+      --shadow:0 1px 8px rgba(0,0,0,.3);
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 18px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between}
+  .hdr-left h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
+  .hdr-left p{font-size:11px;color:var(--muted);margin-top:1px}
+  .hdr-right{display:flex;gap:8px;align-items:center}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
+  .sync-dot.ok{background:var(--green)}.sync-dot.err{background:var(--red)}.sync-dot.busy{background:var(--amber);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .btn-sm{display:flex;align-items:center;gap:5px;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+  .btn-sm:active{opacity:.75}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:var(--border);color:var(--text)}
+  .grand{background:var(--accent);color:#fff;padding:16px 20px 18px;text-align:center}
+  .grand .g-lbl{font-size:10px;opacity:.75;letter-spacing:.7px;text-transform:uppercase}
+  .grand .g-amt{font-size:28px;font-weight:700;letter-spacing:-1px;margin-top:2px}
+  .grand .g-dt{font-size:10px;opacity:.6;margin-top:3px}
+  .container{padding:14px 14px 32px;max-width:540px;margin:0 auto}
+  .sec-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:14px 4px 8px}
+  .card-wrap{margin-bottom:10px}
+  .card-sum{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background .1s;user-select:none}
+  .card-sum:active{background:var(--bg)}
+  .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .s-info{flex:1;min-width:0}
+  .s-name{font-size:15px;font-weight:700}
+  .s-sub{font-size:11px;color:var(--muted);margin-top:1px}
+  .s-bal{font-size:17px;font-weight:700;color:var(--accent);text-align:right;flex-shrink:0}
+  .s-bal.pu{color:var(--purple)}.s-bal.te{color:var(--teal)}
+  .s-bal span{display:block;font-size:10px;color:var(--muted);font-weight:400}
+  .chev{font-size:11px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+  .chev.open{transform:rotate(180deg)}
+  .card-det{display:none;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;margin-top:-6px}
+  .card-det.open{display:block}
+  .nxt-banner{display:flex;align-items:center;gap:7px;margin:10px 14px 0;background:var(--amber-light);border:1px solid var(--amber);border-radius:8px;padding:7px 11px;font-size:11px;color:var(--amber)}
+  .history{padding:6px 0}
+  .tx-row{display:flex;align-items:center;gap:9px;padding:7px 16px;transition:background .1s}
+  .tx-row:hover{background:var(--bg)}
+  .tx-ico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .tx-ico.in{background:var(--green-light);color:var(--green)}
+  .tx-ico.out{background:var(--red-light);color:var(--red)}
+  .tx-desc{flex:1;font-size:12px;min-width:0}
+  .tx-note{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tx-meta{color:var(--muted);font-size:10px;display:flex;gap:5px;align-items:center;margin-top:1px}
+  .tx-db{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:0 4px;font-size:10px;color:var(--muted)}
+  .tx-amt{font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0}
+  .tx-amt.in{color:var(--green)}.tx-amt.out{color:var(--red)}
+  .tx-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:2px 3px;opacity:0;transition:opacity .2s}
+  .tx-row:hover .tx-del{opacity:1}
+  .empty-tx{padding:10px 16px;color:var(--muted);font-size:12px;text-align:center}
+  .add-tx{padding:10px 16px 14px;border-top:1px solid var(--border)}
+  .add-tx-title{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px}
+  .input-row{display:grid;grid-template-columns:1fr 96px;gap:6px;margin-bottom:6px}
+  input[type=text],input[type=number],input[type=date]{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none;font-family:inherit}
+  input:focus{border-color:var(--accent)}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  button.btn{padding:8px 10px;border:none;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+  button.btn:active{opacity:.75}
+  .btn-in{background:var(--green-light);color:var(--green)}
+  .btn-out{background:var(--red-light);color:var(--red)}
+  .sched-row{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--border)}
+  .sched-lbl{font-size:10px;color:var(--muted);flex:1}
+  .sched-row input[type=date]{padding:6px 9px;font-size:11px;max-width:140px}
+  .btn-sched{padding:5px 11px;border:none;border-radius:7px;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .btn-sched:active{opacity:.7}
+  /* SETUP */
+  .setup-wrap{max-width:460px;margin:36px auto;padding:24px;background:var(--surface);border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow)}
+  .setup-wrap h2{font-size:17px;font-weight:700;margin-bottom:6px}
+  .setup-wrap>p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+  .sf{margin-bottom:11px}
+  .sf label{display:block;font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+  .btn-connect{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+  .btn-connect:active{opacity:.8}
+  .setup-hint{font-size:11px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.7}
+  .setup-hint a{color:var(--accent)}
+  .steps{margin:14px 0 0;padding:0;list-style:none}
+  .steps li{font-size:12px;padding:5px 0 5px 20px;position:relative;color:var(--muted);border-bottom:1px solid var(--border)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{content:counter(step);counter-increment:step;position:absolute;left:0;top:5px;font-size:10px;font-weight:700;color:var(--accent)}
+  .steps{counter-reset:step}
+  .loading-wrap{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);font-size:14px}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1F2E;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100;white-space:nowrap}
+  #toast.show{opacity:1}
+  .footer-note{text-align:center;color:var(--muted);font-size:10px;padding:12px 20px 36px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-left">
+    <h1>🏦 Tabungan Keluarga</h1>
+    <p id="sync-lbl">Memuat…</p>
+  </div>
+  <div class="hdr-right">
+    <div class="sync-dot" id="sync-dot"></div>
+    <button class="btn-sm btn-ghost" onclick="exportPDF()" id="btn-pdf" style="display:none">↓ PDF</button>
+    <button class="btn-sm btn-ghost" onclick="showSetup()">⚙</button>
+  </div>
+</header>
+
+<div class="grand">
+  <div class="g-lbl">Total Semua Tabungan</div>
+  <div class="g-amt" id="grand-total">Rp 0</div>
+  <div class="g-dt" id="grand-dt"></div>
+</div>
+
+<div id="main"></div>
+
+<!-- SETUP MODAL -->
+<div id="setup" style="display:none;padding:12px">
+  <div class="setup-wrap">
+    <h2>⚙️ Koneksi Firebase</h2>
+    <p>Masukkan config Firebase-mu supaya data tersimpan di cloud dan bisa diakses dari semua device keluarga.</p>
+    <div class="sf"><label>API Key</label><input type="text" id="f-key" placeholder="AIzaSy…"/></div>
+    <div class="sf"><label>Auth Domain</label><input type="text" id="f-auth" placeholder="project-id.firebaseapp.com"/></div>
+    <div class="sf"><label>Database URL</label><input type="text" id="f-db" placeholder="https://project-id-default-rtdb.firebaseio.com"/></div>
+    <div class="sf"><label>Project ID</label><input type="text" id="f-pid" placeholder="project-id"/></div>
+    <button class="btn-connect" onclick="saveConfig()">Hubungkan →</button>
+    <div class="setup-hint">
+      <strong>Cara buat Firebase gratis (5 menit):</strong>
+    </div>
+    <ol class="steps">
+      <li>Buka <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → <strong>Add project</strong></li>
+      <li>Beri nama project, disable Google Analytics, klik <strong>Create project</strong></li>
+      <li>Klik <strong>Realtime Database</strong> di sidebar → <strong>Create database</strong> → pilih region → <strong>Start in test mode</strong></li>
+      <li>Klik ikon ⚙ (Project settings) → tab <strong>General</strong> → scroll ke bawah → klik <strong>&lt;/&gt; (Web)</strong> → Register app</li>
+      <li>Copy nilai <code>apiKey</code>, <code>authDomain</code>, <code>databaseURL</code>, <code>projectId</code> ke form di atas</li>
+    </ol>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const GROUPS=[
+  {id:'anak',label:'Tabungan Anak',members:[
+    {id:'zaid',   name:'Zaid',   emoji:'👦',bg:'#EEF3FF',fg:'#3B6FE0',bc:''},
+    {id:'zubeir', name:'Zubeir', emoji:'👦',bg:'#FFF4EC',fg:'#D97040',bc:''},
+    {id:'zakaria',name:'Zakaria',emoji:'👦',bg:'#F0FDF4',fg:'#18A066',bc:''},
+  ]},
+  {id:'project',label:'Tabungan Project',members:[
+    {id:'magister',name:'Tabungan Magister',emoji:'🎓',bg:'#EDE9FE',fg:'#6D28D9',bc:'pu',sub:'Program S2'},
+    {id:'umroh',   name:'Umroh Family',     emoji:'🕌',bg:'#CCFBF1',fg:'#0D7377',bc:'te',sub:'Dana Umroh Keluarga'},
+  ]},
+];
+const ALL=GROUPS.flatMap(g=>g.members);
+const SEED={
+  zaid:[
+    {id:'z1',type:'in', amount:1820000,note:'Saldo awal',         date:'2026-01-01'},
+    {id:'z2',type:'out',amount:500000, note:'HP nenek',           date:'2026-01-01'},
+    {id:'z3',type:'out',amount:20000,  note:'Lego curah',         date:'2026-01-01'},
+    {id:'z4',type:'in', amount:790000, note:'THR',                date:'2026-04-01'},
+    {id:'z5',type:'out',amount:20000,  note:'Pizza',              date:'2026-04-10'},
+    {id:'z6',type:'out',amount:50000,  note:'Alat tulis',         date:'2026-04-10'},
+    {id:'z7',type:'in', amount:50000,  note:'Dari nenek',         date:'2026-07-01'},
+    {id:'z8',type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
+    {id:'z9',type:'in', amount:100000, note:'Dari ummi',          date:'2026-10-01'},
+  ],
+  zubeir:[
+    {id:'u1',type:'in', amount:860000, note:'Saldo awal',         date:'2026-01-01'},
+    {id:'u2',type:'out',amount:160000, note:'Lego curah',         date:'2026-01-01'},
+    {id:'u3',type:'in', amount:790000, note:'THR',                date:'2026-04-01'},
+    {id:'u4',type:'out',amount:20000,  note:'Pizza',              date:'2026-04-10'},
+    {id:'u5',type:'out',amount:100000, note:'Alat tulis',         date:'2026-04-10'},
+    {id:'u6',type:'in', amount:50000,  note:'Dari nenek',         date:'2026-07-01'},
+    {id:'u7',type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
+    {id:'u8',type:'in', amount:100000, note:'Dari ummi',          date:'2026-10-01'},
+  ],
+  zakaria:[
+    {id:'k1',type:'in', amount:570000, note:'THR 2026',           date:'2026-04-01'},
+    {id:'k2',type:'out',amount:20000,  note:'Jajan & alat tulis', date:'2026-04-10'},
+    {id:'k3',type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
+    {id:'k4',type:'in', amount:100000, note:'Dari ummi',          date:'2026-11-08'},
+  ],
+  magister:[],umroh:[],
+};
+
+const fmt=n=>'Rp '+n.toLocaleString('id-ID');
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=d=>{if(!d)return'';const[y,m,day]=d.split('-');const M=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return`${+day} ${M[+m-1]} ${y}`};
+const daysUntil=d=>d?Math.ceil((new Date(d)-new Date(today()))/86400000):null;
+
+let fbDb=null,state={},nextUpdate={},expanded={};
+const CFG_KEY='tbg_fb_cfg';
+
+function toast(msg,dur=2200){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),dur)}
+function sync(s,lbl){
+  const d=document.getElementById('sync-dot'),l=document.getElementById('sync-lbl');
+  d.className='sync-dot '+{ok:'ok',err:'err',busy:'busy'}[s];
+  l.textContent=lbl||{ok:'Tersinkron ✓',err:'Gagal sync',busy:'Menyimpan…'}[s];
+}
+
+function getConfig(){try{return JSON.parse(localStorage.getItem(CFG_KEY))}catch{return null}}
+function saveConfig(){
+  const cfg={
+    apiKey:document.getElementById('f-key').value.trim(),
+    authDomain:document.getElementById('f-auth').value.trim(),
+    databaseURL:document.getElementById('f-db').value.trim(),
+    projectId:document.getElementById('f-pid').value.trim(),
+  };
+  if(!cfg.apiKey||!cfg.databaseURL){toast('API Key dan Database URL wajib diisi');return}
+  localStorage.setItem(CFG_KEY,JSON.stringify(cfg));
+  document.getElementById('setup').style.display='none';
+  document.getElementById('main').innerHTML='<div class="loading-wrap">Menghubungkan…</div>';
+  connectFirebase(cfg);
+}
+function showSetup(){
+  const c=getConfig()||{};
+  document.getElementById('f-key').value=c.apiKey||'';
+  document.getElementById('f-auth').value=c.authDomain||'';
+  document.getElementById('f-db').value=c.databaseURL||'';
+  document.getElementById('f-pid').value=c.projectId||'';
+  document.getElementById('setup').style.display='block';
+  document.getElementById('main').style.display='none';
+}
+function hideSetup(){
+  document.getElementById('setup').style.display='none';
+  document.getElementById('main').style.display='block';
+}
+
+function connectFirebase(cfg){
+  try{
+    if(firebase.apps.length)firebase.apps.forEach(a=>a.delete());
+    firebase.initializeApp(cfg);
+    fbDb=firebase.database();
+    fbDb.ref('tabungan').on('value',snap=>{
+      const data=snap.val()||{};
+      ALL.forEach(m=>{
+        const raw=data[m.id];
+        if(raw&&raw.transactions){
+          state[m.id]={transactions:Object.values(raw.transactions)};
+        } else if(!state[m.id]){
+          state[m.id]={transactions:SEED[m.id]||[]};
+          saveChild(m.id);
+        }
+      });
+      nextUpdate=data.schedule?.nextUpdate||{};
+      sync('ok');
+      document.getElementById('btn-pdf').style.display='';
+      render();
+    },err=>{
+      sync('err','Gagal konek');
+      ALL.forEach(m=>{if(!state[m.id])state[m.id]={transactions:SEED[m.id]||[]}});
+      render();
+    });
+    hideSetup();
+  }catch(e){sync('err');toast('Config tidak valid — cek kembali');showSetup()}
+}
+
+async function saveChild(id){
+  if(!fbDb)return;sync('busy');
+  const obj={};(state[id]?.transactions||[]).forEach(t=>{obj[t.id]=t});
+  await fbDb.ref(`tabungan/${id}`).set({transactions:obj}).then(()=>sync('ok')).catch(()=>sync('err'));
+}
+async function saveSched(){
+  if(!fbDb)return;
+  await fbDb.ref('tabungan/schedule').set({nextUpdate}).catch(()=>{});
+}
+
+function toggleCard(id){
+  expanded[id]=!expanded[id];
+  const c=document.getElementById('chev-'+id),d=document.getElementById('det-'+id),s=document.getElementById('sum-'+id);
+  if(c)c.classList.toggle('open',expanded[id]);
+  if(d)d.classList.toggle('open',expanded[id]);
+  if(s){s.style.borderRadius=expanded[id]?'14px 14px 0 0':'14px';s.style.borderBottom=expanded[id]?'1px solid var(--border)':'';}
+}
+
+function bal(txs){return(txs||[]).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0)}
+function grandTotal(){return ALL.reduce((s,m)=>s+bal(state[m.id]?.transactions),0)}
+
+function render(){
+  document.getElementById('grand-total').textContent=fmt(grandTotal());
+  document.getElementById('grand-dt').textContent='Per '+new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  const main=document.getElementById('main');
+  main.style.display='block';
+  main.innerHTML='';
+  const wrap=document.createElement('div');wrap.className='container';
+  GROUPS.forEach(g=>{
+    const st=document.createElement('div');st.className='sec-title';st.textContent=g.label;wrap.appendChild(st);
+    g.members.forEach(m=>{
+      const txs=[...(state[m.id]?.transactions||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+      const b=bal(txs),nxt=nextUpdate[m.id],days=daysUntil(nxt),isOpen=!!expanded[m.id];
+      let nb='';
+      if(nxt){if(days===0)nb=`⏰ Update hari ini (${fmtDate(nxt)})`;else if(days<0)nb=`⚠️ Terlambat sejak ${fmtDate(nxt)}`;else nb=`📅 ${fmtDate(nxt)} — ${days} hari lagi`}
+      const sub=m.sub||(txs.length===0?'Belum ada transaksi':`${txs.length} transaksi`);
+      const cw=document.createElement('div');cw.className='card-wrap';
+      cw.innerHTML=`
+        <div class="card-sum" id="sum-${m.id}" onclick="toggleCard('${m.id}')"
+          style="border-radius:${isOpen?'14px 14px 0 0':'14px'};${isOpen?'border-bottom:1px solid var(--border)':''}">
+          <div class="avatar" style="background:${m.bg};color:${m.fg}">${m.emoji}</div>
+          <div class="s-info"><div class="s-name">${m.name}</div><div class="s-sub">${sub}</div></div>
+          <div class="s-bal ${m.bc}">${fmt(b)}<span>saldo</span></div>
+          <span class="chev${isOpen?' open':''}" id="chev-${m.id}">▼</span>
+        </div>
+        <div class="card-det${isOpen?' open':''}" id="det-${m.id}">
+          ${nb?`<div class="nxt-banner">${nb}</div>`:''}
+          <div class="history">
+            ${txs.length===0?'<div class="empty-tx">Belum ada riwayat transaksi.</div>':
+              txs.map(t=>`<div class="tx-row">
+                <div class="tx-ico ${t.type}">${t.type==='in'?'↑':'↓'}</div>
+                <div class="tx-desc">
+                  <div class="tx-note">${t.note}</div>
+                  <div class="tx-meta"><span>${t.type==='in'?'Masuk':'Keluar'}</span>${t.date?`<span class="tx-db">${fmtDate(t.date)}</span>`:''}</div>
+                </div>
+                <div class="tx-amt ${t.type}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</div>
+                <button class="tx-del" onclick="event.stopPropagation();delTx('${m.id}','${t.id}')">×</button>
+              </div>`).join('')}
+          </div>
+          <div class="add-tx">
+            <div class="add-tx-title">Tambah Transaksi</div>
+            <div class="input-row">
+              <input type="text"   id="note-${m.id}" placeholder="Keterangan…" onclick="event.stopPropagation()"/>
+              <input type="number" id="amt-${m.id}"  placeholder="Nominal" min="0" onclick="event.stopPropagation()"/>
+            </div>
+            <input type="date" id="date-${m.id}" value="${today()}" style="width:100%;margin-bottom:6px" onclick="event.stopPropagation()"/>
+            <div class="btn-row">
+              <button class="btn btn-in"  onclick="event.stopPropagation();addTx('${m.id}','in')">+ Pemasukan</button>
+              <button class="btn btn-out" onclick="event.stopPropagation();addTx('${m.id}','out')">− Pengeluaran</button>
+            </div>
+            <div class="sched-row">
+              <span class="sched-lbl">🗓 Update berikutnya:</span>
+              <input type="date" id="sched-${m.id}" value="${nxt||''}" onclick="event.stopPropagation()"/>
+              <button class="btn-sched" onclick="event.stopPropagation();saveSched2('${m.id}')">Simpan</button>
+            </div>
+          </div>
+        </div>`;
+      wrap.appendChild(cw);
+    });
+  });
+  const ft=document.createElement('div');ft.className='footer-note';ft.textContent='Tabungan Keluarga • '+new Date().toLocaleString('id-ID');
+  wrap.appendChild(ft);
+  main.appendChild(wrap);
+}
+
+async function addTx(id,type){
+  const ne=document.getElementById('note-'+id),ae=document.getElementById('amt-'+id),de=document.getElementById('date-'+id);
+  const note=ne.value.trim(),amount=parseInt(ae.value,10),date=de?.value||today();
+  if(!note){ne.style.borderColor='var(--red)';return}
+  if(!amount||amount<=0){ae.style.borderColor='var(--red)';return}
+  ne.style.borderColor=ae.style.borderColor='';
+  if(!state[id])state[id]={transactions:[]};
+  state[id].transactions.push({id:uid(),type,amount,note,date});
+  await saveChild(id);
+  ne.value=ae.value='';if(de)de.value=today();
+  toast(type==='in'?'+ Pemasukan dicatat ✓':'− Pengeluaran dicatat ✓');
+  expanded[id]=true;render();
+}
+async function delTx(id,txId){
+  if(!confirm('Hapus transaksi ini?'))return;
+  state[id].transactions=state[id].transactions.filter(t=>t.id!==txId);
+  await saveChild(id);expanded[id]=true;render();
+}
+async function saveSched2(id){
+  const v=document.getElementById('sched-'+id)?.value;if(!v)return;
+  nextUpdate[id]=v;await saveSched();toast('Jadwal disimpan ✓');render();
+}
+
+function exportPDF(){
+  const pd=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  let sec='';
+  GROUPS.forEach(g=>{
+    sec+=`<h2 style="font-size:11px;color:#7B859A;text-transform:uppercase;letter-spacing:.5px;margin:22px 0 9px;border-bottom:1px solid #E4E9F0;padding-bottom:5px">${g.label}</h2>`;
+    g.members.forEach(m=>{
+      const txs=[...(state[m.id]?.transactions||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+      const b=bal(txs);
+      sec+=`<div style="margin-bottom:18px;page-break-inside:avoid">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span>${m.emoji}</span><span style="font-size:13px;font-weight:700;flex:1">${m.name}</span>
+          <span style="font-size:13px;font-weight:700;color:#3B6FE0">${fmt(b)}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr>
+            ${['Tanggal','Keterangan','Jenis','Nominal'].map((h,i)=>`<th style="background:#F7F9FC;text-align:${i===3?'right':'left'};padding:5px 7px;font-size:10px;color:#7B859A;border-bottom:1px solid #E4E9F0">${h}</th>`).join('')}
+          </tr></thead>
+          <tbody>
+            ${txs.length===0?`<tr><td colspan="4" style="padding:7px;color:#7B859A;font-style:italic">Belum ada transaksi</td></tr>`:
+              txs.map(t=>`<tr>
+                <td style="padding:5px 7px;border-bottom:1px solid #F0F3F8;font-size:11px">${t.date?fmtDate(t.date):'—'}</td>
+                <td style="padding:5px 7px;border-bottom:1px solid #F0F3F8;font-size:11px">${t.note}</td>
+                <td style="padding:5px 7px;border-bottom:1px solid #F0F3F8;font-size:11px;color:${t.type==='in'?'#18A066':'#D94040'}">${t.type==='in'?'Masuk':'Keluar'}</td>
+                <td style="padding:5px 7px;border-bottom:1px solid #F0F3F8;font-size:11px;text-align:right;color:${t.type==='in'?'#18A066':'#D94040'}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</td>
+              </tr>`).join('')}
+            <tr style="background:#F7F9FC">
+              <td colspan="3" style="padding:5px 7px;font-size:12px;border-top:2px solid #E4E9F0"><strong>Saldo ${m.name}</strong></td>
+              <td style="padding:5px 7px;font-size:12px;text-align:right;border-top:2px solid #E4E9F0"><strong>${fmt(b)}</strong></td>
+            </tr>
+          </tbody>
+        </table></div>`;
+    });
+  });
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Laporan Tabungan Keluarga</title></head>
+<body style="font-family:'Segoe UI',Arial,sans-serif;color:#1A1F2E;margin:0;padding:28px;font-size:12px">
+<h1 style="font-size:18px;font-weight:700;margin-bottom:2px">🏦 Laporan Tabungan Keluarga</h1>
+<p style="color:#7B859A;font-size:11px;margin-bottom:14px">Dicetak: ${pd}</p>
+<div style="background:#3B6FE0;color:#fff;border-radius:10px;padding:12px 16px;margin-bottom:4px">
+  <div style="font-size:10px;opacity:.75;text-transform:uppercase;letter-spacing:.5px">Total Semua Tabungan</div>
+  <div style="font-size:22px;font-weight:700;margin-top:2px">${fmt(grandTotal())}</div>
+</div>${sec}
+<p style="margin-top:22px;font-size:10px;color:#7B859A;border-top:1px solid #E4E9F0;padding-top:7px">Tabungan Keluarga App — ${pd}</p>
+</body></html>`;
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),400);
+}
+
+// INIT
+(function(){
+  const cfg=getConfig();
+  if(cfg&&cfg.apiKey&&cfg.databaseURL){
+    document.getElementById('main').innerHTML='<div class="loading-wrap">Menghubungkan ke Firebase…</div>';
+    connectFirebase(cfg);
+  } else {
+    showSetup();
+  }
+})();
+</script>
+</body>
+</html>
