@@ -22,12 +22,13 @@
     --accent:#5B8FFF;--green:#2CC885;--green-light:#0F2920;
     --red:#FF6B6B;--red-light:#2A1515;
     --amber:#FCD34D;--amber-light:#2A1F05;
-    --purple:#A78BFA;--teal:#2DD4BF;
     --text:#E8EDF8;--muted:#7B859A;
     --shadow:0 1px 8px rgba(0,0,0,.3);
   }}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+
+  /* HEADER */
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 18px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between}
   .hl h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
   .hl p{font-size:11px;color:var(--muted);margin-top:1px}
@@ -35,14 +36,25 @@
   .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s}
   .dot.ok{background:var(--green)}.dot.err{background:var(--red)}.dot.busy{background:var(--amber);animation:pulse 1s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .bsm{display:flex;align-items:center;gap:5px;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
-  .bsm:active{opacity:.75}.bp{background:var(--accent);color:#fff}.bg{background:var(--border);color:var(--text)}
+  .bsm{border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+  .bsm:active{opacity:.75}.bp{background:var(--accent);color:#fff}.bgr{background:var(--border);color:var(--text)}
+
+  /* GRAND */
   .grand{background:var(--accent);color:#fff;padding:16px 20px 18px;text-align:center}
   .grand .gl{font-size:10px;opacity:.75;letter-spacing:.7px;text-transform:uppercase}
   .grand .ga{font-size:28px;font-weight:700;letter-spacing:-1px;margin-top:2px}
   .grand .gd{font-size:10px;opacity:.6;margin-top:3px}
+
+  /* CONTAINER */
   .container{padding:14px 14px 32px;max-width:540px;margin:0 auto}
-  .stitle{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:14px 4px 8px}
+  .sec-row{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 8px}
+  .stitle{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+  .btn-add-member{display:flex;align-items:center;gap:4px;background:none;border:1px dashed var(--border);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s}
+  .btn-add-member:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-add-group{display:flex;align-items:center;gap:6px;width:100%;background:none;border:1px dashed var(--border);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;margin-top:4px}
+  .btn-add-group:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* CARD */
   .cw{margin-bottom:10px}
   .cs{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background .1s;user-select:none}
   .cs:active{background:var(--bg)}
@@ -51,13 +63,14 @@
   .sn{font-size:15px;font-weight:700}
   .ss{font-size:11px;color:var(--muted);margin-top:1px}
   .sb{font-size:17px;font-weight:700;color:var(--accent);text-align:right;flex-shrink:0}
-  .sb.pu{color:var(--purple)}.sb.te{color:var(--teal)}
   .sb span{display:block;font-size:10px;color:var(--muted);font-weight:400}
   .cv{font-size:11px;color:var(--muted);transition:transform .2s;flex-shrink:0}
   .cv.open{transform:rotate(180deg)}
   .cd{display:none;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;margin-top:-6px}
   .cd.open{display:block}
   .nb{display:flex;align-items:center;gap:7px;margin:10px 14px 0;background:var(--amber-light);border:1px solid var(--amber);border-radius:8px;padding:7px 11px;font-size:11px;color:var(--amber)}
+
+  /* HISTORY */
   .history{padding:6px 0}
   .tr{display:flex;align-items:center;gap:9px;padding:7px 16px;transition:background .1s}
   .tr:hover{background:var(--bg)}
@@ -72,35 +85,61 @@
   .tdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;padding:2px 3px;opacity:0;transition:opacity .2s}
   .tr:hover .tdel{opacity:1}
   .etx{padding:10px 16px;color:var(--muted);font-size:12px;text-align:center}
+
+  /* ADD TX FORM */
   .atx{padding:10px 16px 14px;border-top:1px solid var(--border)}
   .att{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px}
   .ir{display:grid;grid-template-columns:1fr 96px;gap:6px;margin-bottom:6px}
-  input[type=text],input[type=number],input[type=date]{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none;font-family:inherit}
-  input:focus{border-color:var(--accent)}
+  input[type=text],input[type=number],input[type=date],select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none;font-family:inherit}
+  input:focus,select:focus{border-color:var(--accent)}
   .br{display:grid;grid-template-columns:1fr 1fr;gap:6px}
   button.btn{padding:8px 10px;border:none;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
   button.btn:active{opacity:.75}
   .bi{background:var(--green-light);color:var(--green)}.bo{background:var(--red-light);color:var(--red)}
+
+  /* MEMBER ACTIONS */
+  .member-actions{display:flex;gap:6px;padding:8px 16px;border-top:1px dashed var(--border)}
+  .btn-edit-m{flex:1;padding:6px;background:none;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s}
+  .btn-edit-m:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-del-m{padding:6px 10px;background:none;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s}
+  .btn-del-m:hover{border-color:var(--red);color:var(--red)}
+
+  /* SCHEDULE */
   .scr{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--border)}
   .scl{font-size:10px;color:var(--muted);flex:1}
   .scr input[type=date]{padding:6px 9px;font-size:11px;max-width:140px}
-  .bsc{padding:5px 11px;border:none;border-radius:7px;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .bsc{padding:5px 11px;border:none;border-radius:7px;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:600;cursor:pointer}
   .bsc:active{opacity:.7}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--surface);border-radius:16px;padding:24px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+  .modal h3{font-size:16px;font-weight:700;margin-bottom:16px}
+  .mf{margin-bottom:12px}
+  .mf label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+  .emoji-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .emoji-btn{width:36px;height:36px;border:2px solid var(--border);border-radius:8px;background:var(--bg);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .emoji-btn.selected{border-color:var(--accent);background:var(--accent);filter:brightness(1.2)}
+  .color-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .color-btn{width:28px;height:28px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .15s}
+  .color-btn.selected{border-color:var(--text)}
+  .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+  .btn-cancel{padding:10px;background:var(--border);color:var(--text);border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+  .btn-save{padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+
   .lwrap{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);font-size:14px}
-  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1F2E;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100;white-space:nowrap}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1F2E;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;z-index:200;white-space:nowrap}
   #toast.show{opacity:1}
   .fn{text-align:center;color:var(--muted);font-size:10px;padding:12px 20px 36px}
 </style>
 </head>
 <body>
 <header>
-  <div class="hl">
-    <h1>🏦 Tabungan Keluarga</h1>
-    <p id="slbl">Menghubungkan…</p>
-  </div>
+  <div class="hl"><h1>🏦 Tabungan Keluarga</h1><p id="slbl">Menghubungkan…</p></div>
   <div class="hr">
     <div class="dot busy" id="sdot"></div>
-    <button class="bsm bg" onclick="exportPDF()" id="bpdf" style="display:none">↓ PDF</button>
+    <button class="bsm bgr" onclick="exportPDF()" id="bpdf" style="display:none">↓ PDF</button>
   </div>
 </header>
 <div class="grand">
@@ -109,197 +148,152 @@
   <div class="gd" id="gdate"></div>
 </div>
 <div id="main"><div class="lwrap">Memuat data…</div></div>
+
+<!-- MODAL TAMBAH/EDIT MEMBER -->
+<div class="modal-overlay" id="modal-member">
+  <div class="modal">
+    <h3 id="modal-title">Tambah Tabungan</h3>
+    <div class="mf"><label>Nama</label><input type="text" id="m-name" placeholder="Nama tabungan…"/></div>
+    <div class="mf"><label>Keterangan (opsional)</label><input type="text" id="m-sub" placeholder="mis: Dana Pendidikan"/></div>
+    <div class="mf"><label>Grup</label>
+      <select id="m-group"></select>
+    </div>
+    <div class="mf"><label>Emoji</label>
+      <div class="emoji-row" id="emoji-row">
+        ${['👦','👧','👶','🧒','👨','👩','🎓','🕌','🏠','🚗','💊','✈️','📚','💰','🌙','⭐','🎯','🏆'].map(e=>
+          `<button class="emoji-btn" onclick="selectEmoji('${e}')">${e}</button>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="mf"><label>Warna</label>
+      <div class="color-row" id="color-row">
+        ${[['#EEF3FF','#3B6FE0'],['#FFF4EC','#D97040'],['#F0FDF4','#18A066'],['#EDE9FE','#6D28D9'],['#CCFBF1','#0D7377'],['#FEF3C7','#B45309'],['#FDEAEA','#D94040'],['#F3F4F6','#374151']].map(([bg,fg])=>
+          `<div class="color-btn" style="background:${bg};border-color:${bg}" onclick="selectColor('${bg}','${fg}')" data-bg="${bg}" data-fg="${fg}"></div>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-member')">Batal</button>
+      <button class="btn-save" onclick="saveMember()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH GRUP -->
+<div class="modal-overlay" id="modal-group">
+  <div class="modal">
+    <h3>Tambah Grup Baru</h3>
+    <div class="mf"><label>Nama Grup</label><input type="text" id="g-name" placeholder="mis: Tabungan Qurban"/></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-group')">Batal</button>
+      <button class="btn-save" onclick="saveGroup()">Simpan</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────
-const SB_URL = 'https://xboqivbagfuvadaawxdm.supabase.co';
-const SB_KEY = 'sb_publishable_pkaL_zrBhSdMkolHyv6-1A_y5BK7-MP';
-const HEADERS = {
-  'Content-Type': 'application/json',
-  'apikey': SB_KEY,
-  'Authorization': 'Bearer ' + SB_KEY,
-  'Accept-Profile': 'public',
-  'Content-Profile': 'public'
+const SB_URL='https://xboqivbagfuvadaawxdm.supabase.co';
+const SB_KEY='sb_publishable_pkaL_zrBhSdMkolHyv6-1A_y5BK7-MP';
+const H={
+  'Content-Type':'application/json',
+  'apikey':SB_KEY,
+  'Authorization':'Bearer '+SB_KEY,
+  'Accept-Profile':'public',
+  'Content-Profile':'public'
 };
 
-// ── DATA ──────────────────────────────────────────────────────────────────
-const GROUPS = [
-  { id:'anak', label:'Tabungan Anak', members:[
-    { id:'zaid',    name:'Zaid',    emoji:'👦', bg:'#EEF3FF', fg:'#3B6FE0', bc:'' },
-    { id:'zubeir',  name:'Zubeir',  emoji:'👦', bg:'#FFF4EC', fg:'#D97040', bc:'' },
-    { id:'zakaria', name:'Zakaria', emoji:'👦', bg:'#F0FDF4', fg:'#18A066', bc:'' },
-  ]},
-  { id:'project', label:'Tabungan Project', members:[
-    { id:'magister', name:'Tabungan Magister', emoji:'🎓', bg:'#EDE9FE', fg:'#6D28D9', bc:'pu', sub:'Program S2' },
-    { id:'umroh',    name:'Umroh Family',      emoji:'🕌', bg:'#CCFBF1', fg:'#0D7377', bc:'te', sub:'Dana Umroh Keluarga' },
-  ]},
-];
-const ALL = GROUPS.flatMap(g => g.members);
+// STATE
+let groups=[], members=[], state={}, nextUpdate={}, expanded={};
+let editingMember=null, selectedEmoji='👤', selectedBg='#EEF3FF', selectedFg='#3B6FE0';
 
-const SEED = {
-  zaid:[
-    {type:'in', amount:1820000,note:'Saldo awal',         date:'2026-01-01'},
-    {type:'out',amount:500000, note:'HP nenek',           date:'2026-01-01'},
-    {type:'out',amount:20000,  note:'Lego curah',         date:'2026-01-01'},
-    {type:'in', amount:790000, note:'THR',                date:'2026-04-01'},
-    {type:'out',amount:20000,  note:'Pizza',              date:'2026-04-10'},
-    {type:'out',amount:50000,  note:'Alat tulis',         date:'2026-04-10'},
-    {type:'in', amount:50000,  note:'Dari nenek',         date:'2026-07-01'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-10-01'},
-  ],
-  zubeir:[
-    {type:'in', amount:860000, note:'Saldo awal',         date:'2026-01-01'},
-    {type:'out',amount:160000, note:'Lego curah',         date:'2026-01-01'},
-    {type:'in', amount:790000, note:'THR',                date:'2026-04-01'},
-    {type:'out',amount:20000,  note:'Pizza',              date:'2026-04-10'},
-    {type:'out',amount:100000, note:'Alat tulis',         date:'2026-04-10'},
-    {type:'in', amount:50000,  note:'Dari nenek',         date:'2026-07-01'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-10-01'},
-  ],
-  zakaria:[
-    {type:'in', amount:570000, note:'THR 2026',           date:'2026-04-01'},
-    {type:'out',amount:20000,  note:'Jajan & alat tulis', date:'2026-04-10'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-09-20'},
-    {type:'in', amount:100000, note:'Dari ummi',          date:'2026-11-08'},
-  ],
-  magister:[], umroh:[],
-};
+// UTILS
+const fmt=n=>'Rp '+n.toLocaleString('id-ID');
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=d=>{if(!d)return'';const[y,m,day]=d.slice(0,10).split('-');const M=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return`${+day} ${M[+m-1]} ${y}`};
+const daysUntil=d=>d?Math.ceil((new Date(d)-new Date(today()))/86400000):null;
 
-// ── UTILS ─────────────────────────────────────────────────────────────────
-const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
-const uid = () => crypto.randomUUID();
-const today = () => new Date().toISOString().slice(0,10);
-const fmtDate = d => {
-  if(!d) return '';
-  const [y,m,day] = d.slice(0,10).split('-');
-  const M=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  return `${+day} ${M[+m-1]} ${y}`;
-};
-const daysUntil = d => d ? Math.ceil((new Date(d)-new Date(today()))/86400000) : null;
-
-let state={}, nextUpdate={}, expanded={};
-
-function toast(msg,dur=2200){
-  const e=document.getElementById('toast');
-  e.textContent=msg; e.classList.add('show');
-  setTimeout(()=>e.classList.remove('show'),dur);
-}
+function toast(msg,dur=2200){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),dur)}
 function syncStatus(s,lbl){
-  const d=document.getElementById('sdot'), l=document.getElementById('slbl');
+  const d=document.getElementById('sdot'),l=document.getElementById('slbl');
   d.className='dot '+s;
   l.textContent=lbl||{ok:'Tersinkron ✓',err:'Gagal sync',busy:'Menyimpan…'}[s];
 }
 
-// ── SUPABASE API ──────────────────────────────────────────────────────────
-async function sbFetch(path, opts={}) {
-  const r = await fetch(SB_URL + '/rest/v1/' + path, {
-    headers: HEADERS, ...opts
-  });
-  if (!r.ok) {
-    const err = await r.text();
-    throw new Error(err);
-  }
-  return r.status === 204 ? null : r.json();
+// SUPABASE
+async function sb(path,opts={}){
+  const r=await fetch(SB_URL+'/rest/v1/'+path,{headers:H,...opts});
+  if(!r.ok){const e=await r.text();throw new Error(e)}
+  return r.status===204?null:r.json();
 }
 
-async function loadAll() {
-  const rows = await sbFetch('tabungan?select=*&order=date.asc');
-  ALL.forEach(m => { state[m.id] = { transactions: [] }; });
-  rows.forEach(r => {
-    if (state[r.member_id]) state[r.member_id].transactions.push(r);
-  });
-  // load schedules
-  try {
-    const sc = await sbFetch('schedule?select=*');
-    sc.forEach(s => { nextUpdate[s.member_id] = s.next_date; });
-  } catch(e) {}
+async function loadAll(){
+  [groups, members] = await Promise.all([
+    sb('groups?select=*&order=sort_order.asc'),
+    sb('members?select=*&order=sort_order.asc'),
+  ]);
+  const txRows = await sb('tabungan?select=*&order=date.asc');
+  members.forEach(m=>{state[m.id]={transactions:[]};});
+  txRows.forEach(r=>{if(state[r.member_id])state[r.member_id].transactions.push(r);});
+  try{const sc=await sb('schedule?select=*');sc.forEach(s=>{nextUpdate[s.member_id]=s.next_date;});}catch(e){}
 }
 
-async function insertTx(memberId, type, amount, note, date) {
-  return sbFetch('tabungan', {
-    method: 'POST',
-    headers: { ...HEADERS, 'Prefer': 'return=representation' },
-    body: JSON.stringify({ member_id: memberId, type, amount, note, date })
-  });
-}
+// RENDER
+function bal(txs){return(txs||[]).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0)}
+function grandTotal(){return members.reduce((s,m)=>s+bal(state[m.id]?.transactions),0)}
 
-async function deleteTxDb(id) {
-  return sbFetch(`tabungan?id=eq.${id}`, { method: 'DELETE' });
-}
+function render(){
+  document.getElementById('gtotal').textContent=fmt(grandTotal());
+  document.getElementById('gdate').textContent='Per '+new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('bpdf').style.display='';
+  const main=document.getElementById('main');
+  main.innerHTML='';
+  const wrap=document.createElement('div');wrap.className='container';
 
-async function upsertSchedule(memberId, nextDate) {
-  return sbFetch('schedule', {
-    method: 'POST',
-    headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates,return=representation' },
-    body: JSON.stringify({ member_id: memberId, next_date: nextDate })
-  });
-}
+  groups.forEach(g=>{
+    const gMembers=members.filter(m=>m.group_id===g.id);
+    // Section header
+    const sr=document.createElement('div');sr.className='sec-row';
+    sr.innerHTML=`
+      <div class="stitle">${g.label}</div>
+      <button class="btn-add-member" onclick="openAddMember('${g.id}')">+ Tambah</button>
+    `;
+    wrap.appendChild(sr);
 
-// ── RENDER ────────────────────────────────────────────────────────────────
-function bal(txs){ return (txs||[]).reduce((s,t)=>s+(t.type==='in'?t.amount:-t.amount),0); }
-function grandTotal(){ return ALL.reduce((s,m)=>s+bal(state[m.id]?.transactions),0); }
+    gMembers.forEach(m=>{
+      const txs=state[m.id]?.transactions||[];
+      const b=bal(txs);
+      const nxt=nextUpdate[m.id];
+      const days=daysUntil(nxt);
+      const isOpen=!!expanded[m.id];
+      let nb='';
+      if(nxt){if(days===0)nb=`⏰ Update hari ini (${fmtDate(nxt)})`;else if(days<0)nb=`⚠️ Terlambat sejak ${fmtDate(nxt)}`;else nb=`📅 ${fmtDate(nxt)} — ${days} hari lagi`}
+      const sub=m.sub||(txs.length===0?'Belum ada transaksi':`${txs.length} transaksi`);
 
-function render() {
-  document.getElementById('gtotal').textContent = fmt(grandTotal());
-  document.getElementById('gdate').textContent =
-    'Per '+new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('bpdf').style.display = '';
-
-  const main = document.getElementById('main');
-  main.innerHTML = '';
-  const wrap = document.createElement('div');
-  wrap.className = 'container';
-
-  GROUPS.forEach(g => {
-    const st = document.createElement('div');
-    st.className = 'stitle'; st.textContent = g.label;
-    wrap.appendChild(st);
-
-    g.members.forEach(m => {
-      const txs = state[m.id]?.transactions || [];
-      const b = bal(txs);
-      const nxt = nextUpdate[m.id];
-      const days = daysUntil(nxt);
-      const isOpen = !!expanded[m.id];
-
-      let nb = '';
-      if(nxt){
-        if(days===0)   nb=`⏰ Update hari ini (${fmtDate(nxt)})`;
-        else if(days<0) nb=`⚠️ Terlambat sejak ${fmtDate(nxt)}`;
-        else            nb=`📅 ${fmtDate(nxt)} — ${days} hari lagi`;
-      }
-      const sub = m.sub || (txs.length===0 ? 'Belum ada transaksi' : `${txs.length} transaksi`);
-
-      const cw = document.createElement('div'); cw.className='cw';
-      cw.innerHTML = `
+      const cw=document.createElement('div');cw.className='cw';
+      cw.innerHTML=`
         <div class="cs" id="cs-${m.id}" onclick="toggle('${m.id}')"
           style="border-radius:${isOpen?'14px 14px 0 0':'14px'};${isOpen?'border-bottom:1px solid var(--border)':''}">
           <div class="av" style="background:${m.bg};color:${m.fg}">${m.emoji}</div>
           <div class="si"><div class="sn">${m.name}</div><div class="ss">${sub}</div></div>
-          <div class="sb ${m.bc}">${fmt(b)}<span>saldo</span></div>
+          <div class="sb">${fmt(b)}<span>saldo</span></div>
           <span class="cv${isOpen?' open':''}" id="cv-${m.id}">▼</span>
         </div>
         <div class="cd${isOpen?' open':''}" id="cd-${m.id}">
           ${nb?`<div class="nb">${nb}</div>`:''}
           <div class="history">
-            ${txs.length===0
-              ?'<div class="etx">Belum ada riwayat transaksi.</div>'
-              :txs.map(t=>`
-                <div class="tr">
-                  <div class="ti ${t.type}">${t.type==='in'?'↑':'↓'}</div>
-                  <div class="td">
-                    <div class="tn">${t.note}</div>
-                    <div class="tm">
-                      <span>${t.type==='in'?'Masuk':'Keluar'}</span>
-                      ${t.date?`<span class="tdb">${fmtDate(t.date)}</span>`:''}
-                    </div>
-                  </div>
-                  <div class="ta ${t.type}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</div>
-                  <button class="tdel" onclick="event.stopPropagation();delTx('${m.id}','${t.id}')">×</button>
-                </div>`).join('')}
+            ${txs.length===0?'<div class="etx">Belum ada riwayat transaksi.</div>':
+              txs.map(t=>`<div class="tr">
+                <div class="ti ${t.type}">${t.type==='in'?'↑':'↓'}</div>
+                <div class="td">
+                  <div class="tn">${t.note}</div>
+                  <div class="tm"><span>${t.type==='in'?'Masuk':'Keluar'}</span>${t.date?`<span class="tdb">${fmtDate(t.date)}</span>`:''}</div>
+                </div>
+                <div class="ta ${t.type}">${t.type==='in'?'+':'−'}${fmt(t.amount)}</div>
+                <button class="tdel" onclick="event.stopPropagation();delTx('${m.id}','${t.id}')">×</button>
+              </div>`).join('')}
           </div>
           <div class="atx">
             <div class="att">Tambah Transaksi</div>
@@ -318,87 +312,197 @@ function render() {
               <button class="bsc" onclick="event.stopPropagation();saveSc('${m.id}')">Simpan</button>
             </div>
           </div>
+          <div class="member-actions">
+            <button class="btn-edit-m" onclick="event.stopPropagation();openEditMember('${m.id}')">✏️ Edit Nama/Emoji</button>
+            <button class="btn-del-m"  onclick="event.stopPropagation();delMember('${m.id}')">🗑</button>
+          </div>
         </div>`;
       wrap.appendChild(cw);
     });
+
+    if(gMembers.length===0){
+      const empty=document.createElement('div');
+      empty.style.cssText='text-align:center;color:var(--muted);font-size:12px;padding:8px 0 4px';
+      empty.textContent='Belum ada tabungan di grup ini';
+      wrap.appendChild(empty);
+    }
   });
 
-  const ft = document.createElement('div');
-  ft.className='fn'; ft.textContent='Tabungan Keluarga • '+new Date().toLocaleString('id-ID');
+  // Tombol tambah grup baru
+  const bg=document.createElement('button');
+  bg.className='btn-add-group';
+  bg.onclick=()=>openModal('modal-group');
+  bg.innerHTML='<span style="font-size:18px">+</span> Tambah Grup Baru';
+  wrap.appendChild(bg);
+
+  const ft=document.createElement('div');ft.className='fn';ft.textContent='Tabungan Keluarga • '+new Date().toLocaleString('id-ID');
   wrap.appendChild(ft);
   main.appendChild(wrap);
 }
 
 function toggle(id){
   expanded[id]=!expanded[id];
-  const c=document.getElementById('cv-'+id);
-  const d=document.getElementById('cd-'+id);
-  const s=document.getElementById('cs-'+id);
-  if(c) c.classList.toggle('open',expanded[id]);
-  if(d) d.classList.toggle('open',expanded[id]);
+  const c=document.getElementById('cv-'+id),d=document.getElementById('cd-'+id),s=document.getElementById('cs-'+id);
+  if(c)c.classList.toggle('open',expanded[id]);
+  if(d)d.classList.toggle('open',expanded[id]);
   if(s){s.style.borderRadius=expanded[id]?'14px 14px 0 0':'14px';s.style.borderBottom=expanded[id]?'1px solid var(--border)':'';}
 }
 
-// ── ADD / DELETE / SCHEDULE ───────────────────────────────────────────────
-async function addTx(id, type){
-  const ne=document.getElementById('note-'+id);
-  const ae=document.getElementById('amt-'+id);
-  const de=document.getElementById('date-'+id);
-  const note=ne.value.trim(), amount=parseInt(ae.value,10), date=de?.value||today();
+// MODAL
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+function selectEmoji(e){
+  selectedEmoji=e;
+  document.querySelectorAll('.emoji-btn').forEach(b=>{b.classList.toggle('selected',b.textContent===e)});
+}
+function selectColor(bg,fg){
+  selectedBg=bg;selectedFg=fg;
+  document.querySelectorAll('.color-btn').forEach(b=>{b.classList.toggle('selected',b.dataset.bg===bg)});
+}
+
+function openAddMember(groupId){
+  editingMember=null;
+  document.getElementById('modal-title').textContent='Tambah Tabungan';
+  document.getElementById('m-name').value='';
+  document.getElementById('m-sub').value='';
+  // Populate grup dropdown
+  const sel=document.getElementById('m-group');
+  sel.innerHTML=groups.map(g=>`<option value="${g.id}"${g.id===groupId?'selected':''}>${g.label}</option>`).join('');
+  selectEmoji('💰');selectColor('#EEF3FF','#3B6FE0');
+  openModal('modal-member');
+}
+
+function openEditMember(memberId){
+  const m=members.find(x=>x.id===memberId);if(!m)return;
+  editingMember=m;
+  document.getElementById('modal-title').textContent='Edit Tabungan';
+  document.getElementById('m-name').value=m.name;
+  document.getElementById('m-sub').value=m.sub||'';
+  const sel=document.getElementById('m-group');
+  sel.innerHTML=groups.map(g=>`<option value="${g.id}"${g.id===m.group_id?'selected':''}>${g.label}</option>`).join('');
+  selectEmoji(m.emoji);selectColor(m.bg,m.fg);
+  openModal('modal-member');
+}
+
+async function saveMember(){
+  const name=document.getElementById('m-name').value.trim();
+  const sub=document.getElementById('m-sub').value.trim();
+  const groupId=document.getElementById('m-group').value;
+  if(!name){document.getElementById('m-name').style.borderColor='var(--red)';return;}
+  document.getElementById('m-name').style.borderColor='';
+  syncStatus('busy');
+  try{
+    if(editingMember){
+      // UPDATE
+      await sb(`members?id=eq.${editingMember.id}`,{
+        method:'PATCH',
+        headers:{...H,'Prefer':'return=representation'},
+        body:JSON.stringify({name,sub,emoji:selectedEmoji,bg:selectedBg,fg:selectedFg,group_id:groupId})
+      });
+      const idx=members.findIndex(x=>x.id===editingMember.id);
+      if(idx>=0) members[idx]={...members[idx],name,sub,emoji:selectedEmoji,bg:selectedBg,fg:selectedFg,group_id:groupId};
+      toast('Tabungan diperbarui ✓');
+    } else {
+      // INSERT
+      const id=uid();
+      const rows=await sb('members',{
+        method:'POST',
+        headers:{...H,'Prefer':'return=representation'},
+        body:JSON.stringify({id,group_id:groupId,name,emoji:selectedEmoji,bg:selectedBg,fg:selectedFg,sub,sort_order:Date.now()})
+      });
+      if(rows&&rows[0]){members.push(rows[0]);state[rows[0].id]={transactions:[]};}
+      toast('Tabungan ditambahkan ✓');
+    }
+    closeModal('modal-member');
+    syncStatus('ok');
+    render();
+  }catch(e){syncStatus('err');toast('Gagal simpan: '+e.message);}
+}
+
+async function delMember(id){
+  const m=members.find(x=>x.id===id);
+  if(!confirm(`Hapus tabungan "${m?.name}"?\nSemua transaksinya juga akan terhapus.`))return;
+  syncStatus('busy');
+  try{
+    await sb(`tabungan?member_id=eq.${id}`,{method:'DELETE'});
+    await sb(`members?id=eq.${id}`,{method:'DELETE'});
+    members=members.filter(x=>x.id!==id);
+    delete state[id];
+    syncStatus('ok');toast('Tabungan dihapus');render();
+  }catch(e){syncStatus('err');toast('Gagal hapus: '+e.message);}
+}
+
+async function saveGroup(){
+  const label=document.getElementById('g-name').value.trim();
+  if(!label){document.getElementById('g-name').style.borderColor='var(--red)';return;}
+  document.getElementById('g-name').style.borderColor='';
+  syncStatus('busy');
+  try{
+    const id=uid();
+    const rows=await sb('groups',{
+      method:'POST',
+      headers:{...H,'Prefer':'return=representation'},
+      body:JSON.stringify({id,label,sort_order:Date.now()})
+    });
+    if(rows&&rows[0])groups.push(rows[0]);
+    document.getElementById('g-name').value='';
+    closeModal('modal-group');
+    syncStatus('ok');toast('Grup ditambahkan ✓');render();
+  }catch(e){syncStatus('err');toast('Gagal simpan: '+e.message);}
+}
+
+// TRANSAKSI
+async function addTx(id,type){
+  const ne=document.getElementById('note-'+id),ae=document.getElementById('amt-'+id),de=document.getElementById('date-'+id);
+  const note=ne.value.trim(),amount=parseInt(ae.value,10),date=de?.value||today();
   if(!note){ne.style.borderColor='var(--red)';return;}
   if(!amount||amount<=0){ae.style.borderColor='var(--red)';return;}
   ne.style.borderColor=ae.style.borderColor='';
   syncStatus('busy');
-  try {
-    const rows = await insertTx(id, type, amount, note, date);
-    if(rows&&rows[0]) state[id].transactions.push(rows[0]);
-    ne.value=ae.value=''; if(de) de.value=today();
-    syncStatus('ok');
-    toast(type==='in'?'+ Pemasukan dicatat ✓':'− Pengeluaran dicatat ✓');
-    expanded[id]=true; render();
-  } catch(e){ syncStatus('err'); toast('Gagal simpan: '+e.message); }
+  try{
+    const rows=await sb('tabungan',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify({member_id:id,type,amount,note,date})});
+    if(rows&&rows[0])state[id].transactions.push(rows[0]);
+    ne.value=ae.value='';if(de)de.value=today();
+    syncStatus('ok');toast(type==='in'?'+ Pemasukan dicatat ✓':'− Pengeluaran dicatat ✓');
+    expanded[id]=true;render();
+  }catch(e){syncStatus('err');toast('Gagal simpan: '+e.message);}
 }
 
-async function delTx(id, txId){
-  if(!confirm('Hapus transaksi ini?')) return;
+async function delTx(id,txId){
+  if(!confirm('Hapus transaksi ini?'))return;
   syncStatus('busy');
-  try {
-    await deleteTxDb(txId);
-    state[id].transactions = state[id].transactions.filter(t=>t.id!==txId);
-    syncStatus('ok'); toast('Transaksi dihapus');
-    expanded[id]=true; render();
-  } catch(e){ syncStatus('err'); toast('Gagal hapus: '+e.message); }
+  try{
+    await sb(`tabungan?id=eq.${txId}`,{method:'DELETE'});
+    state[id].transactions=state[id].transactions.filter(t=>t.id!==txId);
+    syncStatus('ok');toast('Transaksi dihapus');expanded[id]=true;render();
+  }catch(e){syncStatus('err');toast('Gagal hapus: '+e.message);}
 }
 
 async function saveSc(id){
-  const v=document.getElementById('sc-'+id)?.value;
-  if(!v) return;
-  try {
-    await upsertSchedule(id, v);
-    nextUpdate[id]=v; toast('Jadwal disimpan ✓'); render();
-  } catch(e){ toast('Gagal simpan jadwal'); }
+  const v=document.getElementById('sc-'+id)?.value;if(!v)return;
+  try{
+    await sb('schedule',{method:'POST',headers:{...H,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify({member_id:id,next_date:v})});
+    nextUpdate[id]=v;toast('Jadwal disimpan ✓');render();
+  }catch(e){toast('Gagal simpan jadwal');}
 }
 
-// ── EXPORT PDF ────────────────────────────────────────────────────────────
+// EXPORT PDF
 function exportPDF(){
   const pd=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
   let sec='';
-  GROUPS.forEach(g=>{
+  groups.forEach(g=>{
+    const gm=members.filter(m=>m.group_id===g.id);
     sec+=`<h2 style="font-size:11px;color:#7B859A;text-transform:uppercase;letter-spacing:.5px;margin:22px 0 9px;border-bottom:1px solid #E4E9F0;padding-bottom:5px">${g.label}</h2>`;
-    g.members.forEach(m=>{
-      const txs=state[m.id]?.transactions||[];
-      const b=bal(txs);
+    gm.forEach(m=>{
+      const txs=state[m.id]?.transactions||[];const b=bal(txs);
       sec+=`<div style="margin-bottom:18px;page-break-inside:avoid">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <span>${m.emoji}</span><span style="font-size:13px;font-weight:700;flex:1">${m.name}</span>
           <span style="font-size:13px;font-weight:700;color:#3B6FE0">${fmt(b)}</span>
         </div>
         <table style="width:100%;border-collapse:collapse">
-          <thead><tr>
-            ${['Tanggal','Keterangan','Jenis','Nominal'].map((h,i)=>
-              `<th style="background:#F7F9FC;text-align:${i===3?'right':'left'};padding:5px 7px;font-size:10px;color:#7B859A;border-bottom:1px solid #E4E9F0">${h}</th>`
-            ).join('')}
-          </tr></thead>
+          <thead><tr>${['Tanggal','Keterangan','Jenis','Nominal'].map((h,i)=>`<th style="background:#F7F9FC;text-align:${i===3?'right':'left'};padding:5px 7px;font-size:10px;color:#7B859A;border-bottom:1px solid #E4E9F0">${h}</th>`).join('')}</tr></thead>
           <tbody>
             ${txs.length===0?`<tr><td colspan="4" style="padding:7px;color:#7B859A;font-style:italic">Belum ada transaksi</td></tr>`:
               txs.map(t=>`<tr>
@@ -425,36 +529,20 @@ function exportPDF(){
 </div>${sec}
 <p style="margin-top:22px;font-size:10px;color:#7B859A;border-top:1px solid #E4E9F0;padding-top:7px">Tabungan Keluarga App — ${pd}</p>
 </body></html>`;
-  const w=window.open('','_blank');
-  w.document.write(html); w.document.close();
-  setTimeout(()=>w.print(),400);
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),400);
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────
+// INIT
 async function init(){
   syncStatus('busy','Menghubungkan…');
-  try {
+  try{
     await loadAll();
-    // Seed data jika kosong
-    for(const m of ALL){
-      if(state[m.id].transactions.length===0 && SEED[m.id]?.length>0){
-        for(const t of SEED[m.id]){
-          const rows = await insertTx(m.id, t.type, t.amount, t.note, t.date);
-          if(rows&&rows[0]) state[m.id].transactions.push(rows[0]);
-        }
-      }
-    }
-    syncStatus('ok');
-    render();
-  } catch(e){
+    syncStatus('ok');render();
+  }catch(e){
     syncStatus('err','Gagal konek — '+e.message);
-    // fallback offline dengan seed data
-    ALL.forEach(m=>{ state[m.id]={transactions:SEED[m.id]?.map((t,i)=>({...t,id:'seed-'+i,...{member_id:m.id}}))||[]}; });
-    render();
-    toast('Mode offline — data tidak tersimpan');
+    toast('Gagal terhubung ke database');
   }
 }
-
 init();
 </script>
 </body>
